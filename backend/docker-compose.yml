@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:18
     environment:
-      POSTGRES_DB: healthcamp
-      POSTGRES_USER: healthcamp
-      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: ${DATABASE_URL}
+      POSTGRES_USER: ${DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
