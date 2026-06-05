@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: healthcamp-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-healthcamp}
+      POSTGRES_USER: ${POSTGRES_USER:-healthcamp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-healthcamp} -d ${POSTGRES_DB:-healthcamp}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.2.5
+    container_name: healthcamp-redis
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    container_name: healthcamp-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-healthcamp}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-healthcamp}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST:-redis}
+      SPRING_DATA_REDIS_PORT: ${REDIS_PORT:-6379}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      JWT_EXPIRY_MS: ${JWT_EXPIRY_MS:-86400000}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:4200,http://localhost:8081}
+      CORS_ORIGIN_PATTERNS: ${CORS_ORIGIN_PATTERNS:-http://localhost:*,http://127.0.0.1:*}
+      SMS_PROVIDER: ${SMS_PROVIDER:-mock}
+    ports:
+      - "5000:5000"
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    container_name: healthcamp-web
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+
+volumes:
+  postgres_data:

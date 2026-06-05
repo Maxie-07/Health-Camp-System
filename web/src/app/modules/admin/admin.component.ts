@@ -1,0 +1,12 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-admin',
+  standalone: false,
+  templateUrl: './admin.component.html'
+})
+export class AdminComponent {
+  readonly users = [
+    { username: 'admin', role: 'ADMIN', active: true }
+  ];
+}

@@ -1,0 +1,146 @@
+openapi: 3.1.0
+info:
+  title: Health Camp API
+  version: 1.0.0
+  description: REST API for health camp operations
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: JWT issued
+  /auth/refresh:
+    post:
+      summary: Refresh JWT
+      responses:
+        '200':
+          description: JWT refreshed
+  /beneficiaries:
+    get:
+      summary: List beneficiaries
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Beneficiary list
+    post:
+      summary: Create beneficiary
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Created
+  /beneficiaries/summary:
+    get:
+      summary: Dashboard summary
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Summary counts
+  /beneficiaries/qr/{code}:
+    get:
+      summary: Lookup beneficiary by QR code
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Beneficiary found
+  /visits:
+    get:
+      summary: List visits
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Visit list
+    post:
+      summary: Create visit
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Created
+  /stock:
+    get:
+      summary: List stock items
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Stock list
+  /stock/low:
+    get:
+      summary: List low stock items
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Low stock list
+  /reports/daily:
+    get:
+      summary: Daily report
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Daily aggregates
+  /reports/weekly:
+    get:
+      summary: Weekly report
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Weekly aggregates
+  /reports/stock-summary:
+    get:
+      summary: Stock summary report
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Stock summary
+  /sync/pull:
+    get:
+      summary: Pull remote changes for offline sync
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Sync payload
+  /sync/push:
+    post:
+      summary: Push local changes from mobile
+      security:
+        - bearerAuth: []
+      responses:
+        '202':
+          description: Accepted
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

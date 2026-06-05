@@ -1,0 +1,103 @@
+<div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-slate-900">Enroll New Camp Participant</h1>
+    <p class="mt-1 text-sm text-slate-500">Capture demographic, vulnerability, and rural identity fallback records.</p>
+  </div>
+
+  <p-message *ngIf="message" severity="success" [text]="message" styleClass="mb-5 w-full" />
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-8">
+    <section>
+      <div class="mb-4 flex items-center justify-between gap-3">
+        <div>
+          <h2 class="flex items-center gap-2 text-sm font-bold tracking-[0.16em] text-slate-900">
+            <i class="pi pi-user-plus text-violet-600"></i>
+            VULNERABLE REGISTER
+          </h2>
+          <p class="mt-1 text-xs text-slate-500">Section 1: Demographic & Camp Info</p>
+        </div>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="md:col-span-2">
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Full Name of Beneficiary *
+          </label>
+          <input pInputText formControlName="fullName" class="w-full" placeholder="Enter full legal name" />
+        </div>
+
+        <div>
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Vulnerability Category *
+          </label>
+          <p-select formControlName="vulnerability" [options]="vulnerabilities" styleClass="w-full" />
+        </div>
+
+        <div>
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">Age *</label>
+          <p-inputNumber formControlName="age" suffix=" YEARS" styleClass="w-full" [min]="0" />
+        </div>
+
+        <div>
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Home District *
+          </label>
+          <p-select formControlName="district" [options]="districts" styleClass="w-full" />
+        </div>
+
+        <div>
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Subcounty / Village *
+          </label>
+          <input pInputText formControlName="subcounty" class="w-full" placeholder="Enter subcounty or village" />
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Contact Phone
+          </label>
+          <input pInputText formControlName="phone" class="w-full" placeholder="+256..." />
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-sky-100 bg-sky-50 p-5">
+      <div class="mb-4 flex items-center justify-between gap-3">
+        <h3 class="text-sm font-bold tracking-[0.16em] text-slate-900">Rural Identity Fallback Records</h3>
+        <span class="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-sky-700">
+          Lost-Card Backup
+        </span>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Village Chief LC1 Endorser
+          </label>
+          <input pInputText formControlName="lc1Chief" class="w-full" placeholder="Chief name" />
+        </div>
+        <div>
+          <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Partial NIN (National ID or relative check)
+          </label>
+          <input pInputText formControlName="partialNin" class="w-full" placeholder="Last 4 digits or relative ID" />
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-xl border border-dashed border-sky-200 bg-white p-6 text-center">
+        <p class="text-sm font-semibold text-slate-700">Simulated Biometric Fingerprint Hash</p>
+        <p class="mt-2 text-xs text-slate-500">
+          Placeholder for field biometric capture integration during offline enrollment.
+        </p>
+      </div>
+    </section>
+
+    <p-button
+      type="submit"
+      label="Register and Generate Barcode ID"
+      icon="pi pi-user-plus"
+      styleClass="w-full py-3"
+      [disabled]="form.invalid"
+    />
+  </form>
+</div>

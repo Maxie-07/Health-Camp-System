@@ -1,0 +1,13 @@
+<nav class="overflow-x-auto rounded-2xl border border-slate-200 bg-slate-100 p-2 shadow-sm">
+  <div class="flex min-w-max gap-2">
+    <a
+      *ngFor="let item of items"
+      [routerLink]="item.route"
+      routerLinkActive="bg-slate-900 text-white shadow-md"
+      class="flex items-center gap-2 rounded-xl px-4 py-3 text-[11px] font-bold tracking-[0.14em] text-slate-700 transition hover:bg-white"
+    >
+      <i [class]="item.icon"></i>
+      <span>{{ item.label }}</span>
+    </a>
+  </div>
+</nav>

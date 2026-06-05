@@ -1,0 +1,43 @@
+<div class="mb-8">
+  <h2 class="text-2xl font-semibold text-slate-900">Stock</h2>
+  <p class="mt-1 text-sm text-slate-500">Medical supplies inventory and alerts</p>
+</div>
+
+<p-card styleClass="border border-slate-200 shadow-sm">
+  <p-table
+    [value]="items"
+    [paginator]="true"
+    [rows]="10"
+    styleClass="p-datatable-sm"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template #header>
+      <tr>
+        <th>Name</th>
+        <th>SKU</th>
+        <th>Quantity</th>
+        <th>Threshold</th>
+        <th>Status</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-item>
+      <tr [class.bg-red-50]="item.lowStock">
+        <td class="font-medium">{{ item.name }}</td>
+        <td><code class="rounded bg-slate-100 px-2 py-1 text-xs">{{ item.sku }}</code></td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.minThreshold }}</td>
+        <td>
+          <p-tag
+            [value]="item.lowStock ? 'Low stock' : 'OK'"
+            [severity]="item.lowStock ? 'danger' : 'success'"
+          />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="5" class="py-8 text-center text-slate-500">No stock items found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

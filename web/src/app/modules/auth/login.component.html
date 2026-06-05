@@ -1,0 +1,37 @@
+<div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-sky-50 to-violet-50 px-4">
+  <p-card styleClass="w-full max-w-md border-0 shadow-xl">
+    <ng-template #header>
+      <div class="rounded-t-xl bg-slate-900 px-6 py-8 text-center text-white">
+        <span class="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-2xl">
+          <i class="pi pi-heart-fill"></i>
+        </span>
+        <h1 class="text-2xl font-semibold">Health Camp Command</h1>
+        <p class="mt-1 text-sm text-slate-300">Offline-capable camp coordination console</p>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-5 px-2 py-2">
+      <p-message *ngIf="error" severity="error" [text]="error" styleClass="w-full" />
+
+      <p-floatlabel variant="on">
+        <input pInputText id="username" formControlName="username" class="w-full" autocomplete="username" />
+        <label for="username">Username</label>
+      </p-floatlabel>
+
+      <p-floatlabel variant="on">
+        <p-password
+          inputId="password"
+          formControlName="password"
+          [feedback]="false"
+          [toggleMask]="true"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          autocomplete="current-password"
+        />
+        <label for="password">Password</label>
+      </p-floatlabel>
+
+      <p-button type="submit" label="Enter Command Console" icon="pi pi-sign-in" styleClass="w-full" [disabled]="form.invalid" />
+    </form>
+  </p-card>
+</div>

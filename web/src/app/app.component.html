@@ -1,0 +1,28 @@
+<div class="min-h-screen bg-slate-100" *ngIf="authService.isAuthenticated(); else authOnly">
+  <header class="border-b border-slate-200 bg-white px-4 py-3 lg:px-8">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-700">
+          <i class="pi pi-heart-fill"></i>
+        </span>
+        <div>
+          <p class="text-sm font-bold tracking-[0.16em] text-slate-900">HEALTH CAMP COMMAND</p>
+          <p class="text-xs text-slate-500">{{ authService.currentUser() || 'Coordinator' }}</p>
+        </div>
+      </div>
+      <p-button label="Logout" icon="pi pi-sign-out" severity="secondary" [outlined]="true" (onClick)="logout()" />
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-7xl space-y-5 px-4 py-5 lg:px-8 lg:py-6">
+    <app-sync-control-deck />
+    <app-camp-nav-bar />
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<ng-template #authOnly>
+  <router-outlet></router-outlet>
+</ng-template>

@@ -1,0 +1,118 @@
+<div class="grid gap-6 xl:grid-cols-[420px_minmax(0,1fr)]">
+  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div class="mb-4">
+      <h2 class="text-sm font-bold tracking-[0.16em] text-slate-900">
+        CAMP REGISTRY ({{ beneficiaries.length }} REGISTERED)
+      </h2>
+      <p class="mt-1 text-xs text-slate-500">Search by name, ID, district, or vulnerability status.</p>
+    </div>
+
+    <div class="mb-4 rounded-xl border border-sky-100 bg-sky-50 p-3 text-xs leading-relaxed text-slate-600">
+      <i class="pi pi-lightbulb mr-2 text-sky-600"></i>
+      Select a participant to review MUAC history, LC1 endorsement, and screening readiness.
+    </div>
+
+    <div class="space-y-3">
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          class="w-full"
+          placeholder="Search by name, ID..."
+          [(ngModel)]="search"
+          (ngModelChange)="applyFilters()"
+        />
+      </span>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <p-select
+          [options]="districts"
+          [(ngModel)]="districtFilter"
+          (ngModelChange)="applyFilters()"
+          placeholder="District"
+          styleClass="w-full"
+        />
+        <p-select
+          [options]="['ALL', 'CRITICAL ACTION TEAM', 'ACTIVE', 'RECOVERED']"
+          [(ngModel)]="statusFilter"
+          (ngModelChange)="applyFilters()"
+          placeholder="Status"
+          styleClass="w-full"
+        />
+      </div>
+    </div>
+
+    <div class="mt-4 max-h-[620px] space-y-3 overflow-y-auto pr-1">
+      <button
+        type="button"
+        *ngFor="let item of filtered"
+        (click)="select(item)"
+        class="w-full rounded-xl border p-4 text-left transition hover:border-slate-400"
+        [class.border-slate-900]="selected?.id === item.id"
+        [class.shadow-sm]="selected?.id === item.id"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <span class="rounded-md bg-sky-100 px-2 py-1 font-mono text-[11px] font-bold text-sky-700">
+              {{ item.displayId }}
+            </span>
+            <h3 class="mt-2 font-bold text-slate-900">{{ item.fullName }}</h3>
+            <p class="mt-1 text-xs text-slate-500">
+              {{ item.vulnerability }} • {{ item.age }} Years • {{ item.district }}
+            </p>
+            <p class="mt-1 text-xs text-slate-500">{{ item.lc1Chief }}</p>
+          </div>
+          <div class="text-right">
+            <p-tag [value]="item.status" [severity]="severity(item.status)" />
+            <p class="mt-2 text-xs font-semibold text-slate-500">MUAC: {{ item.muac }} cm</p>
+          </div>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <section class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <ng-container *ngIf="selected as person; else emptyState">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <span class="rounded-md bg-sky-100 px-2 py-1 font-mono text-xs font-bold text-sky-700">
+            {{ person.displayId }}
+          </span>
+          <h2 class="mt-3 text-2xl font-bold text-slate-900">{{ person.fullName }}</h2>
+          <p class="mt-1 text-sm text-slate-500">{{ person.vulnerability }} • {{ person.district }}</p>
+        </div>
+        <p-tag [value]="person.status" [severity]="severity(person.status)" />
+      </div>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <div class="rounded-xl border border-slate-200 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Contact Phone</p>
+          <p class="mt-2 font-semibold text-slate-900">{{ person.phone || 'Not recorded' }}</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Camp Location</p>
+          <p class="mt-2 font-semibold text-slate-900">{{ person.campLocation || person.subcounty }}</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">MUAC Reading</p>
+          <p class="mt-2 text-2xl font-bold" [class.text-rose-600]="person.muac < 11.5">{{ person.muac }} cm</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">QR / Barcode ID</p>
+          <p class="mt-2 font-mono text-sm text-slate-900">{{ person.qrCode }}</p>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 text-center">
+        <span class="flex h-16 w-16 items-center justify-center rounded-full bg-sky-100 text-sky-600">
+          <i class="pi pi-heart text-2xl"></i>
+        </span>
+        <p class="mt-4 max-w-md text-sm leading-relaxed text-slate-500">
+          Select a participant beneficiary from the camp registry to review profile details and initiate screening.
+        </p>
+      </div>
+    </ng-template>
+  </section>
+</div>
