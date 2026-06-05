@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class CorsProperties {
 
     private String origins = "http://localhost:4200,http://localhost:8081";
-    private String originPatterns = "http://localhost:*,http://127.0.0.1:*","https://health-camp-system.vercel.app";
+    private String originPatterns = "http://localhost:*,http://127.0.0.1:*,https://health-camp-system.vercel.app";
 
     public String getOrigins() {
         return origins;
